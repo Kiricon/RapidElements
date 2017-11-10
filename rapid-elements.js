@@ -1,16 +1,16 @@
-function register(c) {
-    let tag = String(c.name);
-    for(let i = tag.length-1; i >= 0; i--) {
-        let char = tag[i];
-        if(char < 'a') {
+function buildTagName(name) {
+    return [...name].map( (x, i) => {
+        if( x < 'a') {
             if(i !== 0) {
-                tag = tag.replace(char, `-${char.toLowerCase()}`);
-            }else {
-                tag = tag.replace(char, char.toLowerCase());
+                return `-${x.toLowerCase()}`;
             }
+            return x.toLowerCase();
         }
-    }
+        return x;
+    }).join('');
+}
 
+function register(c) {
     const template = document.createElement('template');
     template.innerHTML = c.prototype.template();
 
@@ -23,23 +23,5 @@ function register(c) {
 
         template() {}
     }
-
-    customElements.define(tag, b);
+    customElements.define(buildTagName(c.name), b);
 }
-
-
-class LitHotdog extends HTMLElement {
-
-    template() {
-        return `<button>boi</button>`;
-    }
-}
-
-class FunInput extends HTMLElement {
-    template () {
-        return `<input type="text" placeholder="fun input..." />`;
-    }
-}
-
-register(LitHotdog);
-register(FunInput);
