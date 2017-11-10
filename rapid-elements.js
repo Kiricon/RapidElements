@@ -1,11 +1,12 @@
 function register(c) {
     let elementName = String(c.name);
     for(let i = elementName.length-1; i >= 0; i--) {
-        if(elementName[i] < 'a') {
+        let char = elementName[i];
+        if(char < 'a') {
             if(i !== 0) {
-                elementName = elementName.replace(elementName[i], `-${elementName[i].toLowerCase()}`);
+                elementName = elementName.replace(char, `-${char.toLowerCase()}`);
             }else {
-                elementName = elementName.replace(elementName[i], elementName[i].toLowerCase());
+                elementName = elementName.replace(char, char.toLowerCase());
             }
         }
     }
@@ -19,6 +20,8 @@ function register(c) {
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(template.content.cloneNode(true));
         }
+
+        template() {}
     }
 
     customElements.define(elementName, b);
@@ -26,18 +29,10 @@ function register(c) {
 
 
 class LitHotdog extends HTMLElement {
+
     template() {
-        return '<button>boi</button>';
-    }
-    connectedCallback() {
-        console.log('connected');
-        this.shadowRoot.querySelector('button').addEventListener('click', () => {
-            alert('ouch');
-        });
+        return `<button>boi</button>`;
     }
 }
-
-console.log(LitHotdog.prototype.template());
-
 
 register(LitHotdog);
