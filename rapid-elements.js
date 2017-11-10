@@ -1,6 +1,5 @@
 function register(c) {
     let elementName = String(c.name);
-    let indexes = [];
     for(let i = elementName.length-1; i >= 0; i--) {
         if(elementName[i] < 'a') {
             if(i !== 0) {
@@ -11,28 +10,34 @@ function register(c) {
         }
     }
 
-    customElements.define(elementName, c);
-}
+    const template = document.createElement('template');
+    template.innerHTML = c.prototype.template();
 
-class RapidElement extends HTMLElement {
-    /**
-     * Part of the custom element spec. Called after your element is attached to
-     * the DOM. Do anything related to the element or its children here in most
-     * cases.
-     */
-    connectedCallback() {
-        const template = document.createElement('template');
-        template.innerHTML = this.template();
-        this.attachShadow({mode: 'open'});
-        this.shadowRoot.appendChild(template.content.cloneNode(true));
+    class b extends c {
+        constructor() {
+            super();
+            this.attachShadow({mode: 'open'});
+            this.shadowRoot.appendChild(template.content.cloneNode(true));
+        }
     }
 
+    customElements.define(elementName, b);
 }
 
-class LitHotdog extends RapidElement {
+
+class LitHotdog extends HTMLElement {
     template() {
-        return `booooii`;
+        return '<button>boi</button>';
+    }
+    connectedCallback() {
+        console.log('connected');
+        this.shadowRoot.querySelector('button').addEventListener('click', () => {
+            alert('ouch');
+        });
     }
 }
+
+console.log(LitHotdog.prototype.template());
+
 
 register(LitHotdog);
